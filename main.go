@@ -47,7 +47,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Fprint(os.Stdout, "Which domain should the emails use? (default: example.com > ")
+	fmt.Fprint(os.Stdout, "Which domain should the emails use? (default: example.com) > ")
 
 	domainInput, err := bufio.NewReader(os.Stdin).ReadString('\n')
 	if err != nil {
