@@ -78,4 +78,6 @@ func main() {
 		email := generateRandomEmail(name, domain)
 		writer.Write([]string{name, email})
 	}
+
+	fmt.Fprintln(os.Stdout, "Done!")
 }
