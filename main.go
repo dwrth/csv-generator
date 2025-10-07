@@ -26,12 +26,12 @@ func generateRandomName() string {
 	return firstName + " " + lastName
 }
 
-func generateRandomEmail(name string) string {
+func generateRandomEmail(name, domain string) string {
 	// Convert to lowercase and replace spaces with dots
 	emailName := strings.ToLower(strings.ReplaceAll(name, " ", "."))
 	// Add random number to make it unique
 	randomNum := fmt.Sprintf("%03d", rand.Intn(1000))
-	return fmt.Sprintf("%s%s@gen.vystem.io", emailName, randomNum)
+	return fmt.Sprintf("%s%s@%s", emailName, randomNum, domain)
 }
 
 func main() {
@@ -45,6 +45,19 @@ func main() {
 	count, err := strconv.Atoi(strings.TrimSpace(countString[:len(countString)-1]))
 	if err != nil {
 		panic(err)
+	}
+
+	fmt.Fprint(os.Stdout, "Which domain should the emails use? (default: example.com > ")
+
+	domainInput, err := bufio.NewReader(os.Stdin).ReadString('\n')
+	if err != nil {
+		panic(err)
+	}
+
+	domain := strings.TrimSpace(domainInput[:len(domainInput)-1])
+
+	if len(domain) == 0 {
+		domain = "example.com"
 	}
 
 	file, err := os.Create("generated_data.csv")
@@ -62,7 +75,7 @@ func main() {
 	// Generate 7000 entries
 	for range count {
 		name := generateRandomName()
-		email := generateRandomEmail(name)
+		email := generateRandomEmail(name, domain)
 		writer.Write([]string{name, email})
 	}
 }
