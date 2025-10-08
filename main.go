@@ -60,7 +60,8 @@ func main() {
 		domain = "example.com"
 	}
 
-	file, err := os.Create("generated_data.csv")
+	filename := "generated_data_" + strconv.Itoa(count) + ".csv"
+	file, err := os.Create(filename)
 	if err != nil {
 		panic(err)
 	}
@@ -69,15 +70,18 @@ func main() {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	// Write header
 	writer.Write([]string{"name", "email"})
 
-	// Generate 7000 entries
 	for range count {
 		name := generateRandomName()
 		email := generateRandomEmail(name, domain)
 		writer.Write([]string{name, email})
 	}
 
-	fmt.Fprintln(os.Stdout, "Done!")
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Fprintln(os.Stdout, "Done! File written to: "+wd+"/"+filename)
 }
